@@ -1,0 +1,28 @@
+﻿@using TicketSystem.Domain;
+@using TicketSystem.Data;
+@using Microsoft.AspNet.Identity;
+@using Microsoft.AspNet.Identity.EntityFramework;
+@model IEnumerable<TicketSystem.Domain.Ticket>
+@{
+    ApplicationDbContext db = new ApplicationDbContext();
+    var userStore = new UserStore<ApplicationUser>(db);
+    var userManager = new UserManager<ApplicationUser>(userStore);
+    var user = userManager.FindById(User.Identity.GetUserId());
+}
+
+@{
+    var sum = 10;
+    var tickets = db.Tickets.Where(x => x.ApplicationUser.UserName == User.Identity.Name).Count();
+    var ticketsByUser = sum + tickets;
+}
+
+<h2>UserProfile</h2>
+
+<div class="container">
+    <div class="row">
+        <p><img src="@Url.Content(user.ImageProfileIcon)" alt="Alternate Text" /></p>
+        <p></p>
+        <p>UserName: @User.Identity.Name</p>        
+        <p>Points: @ticketsByUser</p>
+    </div>
+</div>

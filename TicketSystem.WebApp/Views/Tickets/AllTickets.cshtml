@@ -1,0 +1,67 @@
+﻿@model PagedList.IPagedList<TicketSystem.Domain.Ticket>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" />
+
+@{
+    ViewBag.Title = "AllTickets";
+}
+
+<h2>AllTickets</h2>
+
+@using (Html.BeginForm("AllTickets","Tickets", FormMethod.Get))
+{
+    <p>
+        Search Here: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
+        <input type="submit" value="Search" class="btn btn-success btn-sm"/>
+    </p>
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("TicketTitle","AllTickets", new { sortOrder = ViewBag.SortByTitle, currentFilter = ViewBag.CurrentFilter })
+            @*@Html.DisplayNameFor(model => model.TicketTitle)*@
+        </th>
+        <th>
+            @Html.ActionLink("Category","AllTickets", new { sortOrder = ViewBag.SortByCategory, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+           @Html.ActionLink("Priority","AllTickets", new { sortOrder=ViewBag.SortByPriority, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th>
+            @Html.ActionLink("Author","AllTickets", new { sortOrder = ViewBag.SortByAuthor, currentFilter = ViewBag.CurrentFilter })
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TicketTitle)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.Name)
+            </td>
+            <td class="priority">
+                @Html.DisplayFor(modelItem => item.Priority.PriorityStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApplicationUser.UserName)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = item.TicketID }) |
+            </td>
+        </tr>
+    }
+    
+</table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model,
+    page => Url.Action("AllTickets", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter}))
+
+@section scripts{
+    <script src="~/Content/script.js"></script>
+}

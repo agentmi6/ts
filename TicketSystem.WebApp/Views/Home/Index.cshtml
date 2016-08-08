@@ -1,0 +1,16 @@
+﻿@model IEnumerable<TicketSystem.Domain.Ticket>
+
+<h2>Ticketing System</h2>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4">
+            <ul class="list-unstyled">
+                <li><h3>@item.TicketTitle</h3></li>
+                <li><p><b>Category: </b>@item.Category.Name</p></li>
+                <li><p><b>Author: </b>@item.ApplicationUser.UserName</p></li>
+                <li><p>@Html.ActionLink("More details","Details","Tickets", new { id = item.TicketID }, new { @class="btn btn-primary"})</p></li>
+            </ul>                                    
+        </div>
+    }
+</div>
